@@ -45,13 +45,21 @@ def create_empty_board(board_width, board_height):
         board.append(dummy)
     return board
 
-def avoid_snakes_neck(last_move, possible_move):
+def avoid_snakes_neck(last_move, possible_move, snake):
     if last_move == None:
-        return possible_move
-    else:
-        op_move = get_opposite_move(last_move)
-        possible_move.remove(op_move)
-        return possible_move
+        if snake['length'] < 2:
+            return possible_move
+        else:
+            neck = snake['body'][1]
+            head = snake['body'][0]
+            for move in possible_move:
+                if head == pos_after_move(neck, move):
+                    last_move = move
+                    break
+    
+    op_move = get_opposite_move(last_move)
+    possible_move.remove(op_move)
+    return possible_move
 
 def set_board_state(board, pos, state):
     board[pos['y']][pos['x']] = state
@@ -89,7 +97,7 @@ class Player:
         return avoid_walls(self.my_snake['head'], self.board.width, self.board.height, possible_moves)
     
     def avoid_neck(self, possible_moves):
-        return avoid_snakes_neck(self.last_move, possible_moves)
+        return avoid_snakes_neck(self.last_move, possible_moves, self.my_snake)
 
 class Board:
 
