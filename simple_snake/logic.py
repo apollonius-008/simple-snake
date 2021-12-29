@@ -112,7 +112,7 @@ class Board:
 
     def create_snake_board(self, board):
         self.snake_board = create_empty_board(self.width, self.height)
-        for snake in board['snake']:
+        for snake in board['snakes']:
             for part in snake['body']:
                 set_board_state(self.snake_board, part, snake['id'])
 
