@@ -3,6 +3,7 @@ import os
 
 from flask import Flask
 from flask import request
+from logic import Player
 
 app = Flask(__name__)
 players = {}
@@ -30,6 +31,7 @@ def handle_start():
     """
     data = request.get_json()
     print(f"{data['game']['id']} START")
+    players[data['game']['id']] = Player(data)
     return "ok"
 
 
@@ -40,7 +42,12 @@ def handle_move():
     Valid moves are "up", "down", "left", or "right".
     """
     data = request.get_json()
-    move = 'up'
+    if data['turn'] == 0:
+        players[data['game']['id']] = Player(data)
+        move = players[data['game']['id']].get_move()
+    else:
+        players[data['game']['id']].update(data)
+        move = players[data['game']['id']].get_move()
     return {"move": move}
 
 
@@ -51,7 +58,7 @@ def end():
     It's purely for informational purposes, you don't have to make any decisions here.
     """
     data = request.get_json()
-
+    del players[data['game']['id']]
     print(f"{data['game']['id']} END")
     return "ok"
 
