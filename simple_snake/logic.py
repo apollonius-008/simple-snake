@@ -47,19 +47,11 @@ def create_empty_board(board_width, board_height):
 
 def avoid_snakes_neck(last_move, possible_move, snake):
     if last_move == None:
-        if snake['length'] < 2:
-            return possible_move
-        else:
-            neck = snake['body'][1]
-            head = snake['body'][0]
-            for move in possible_move:
-                if head == pos_after_move(neck, move):
-                    last_move = move
-                    break
-    
-    op_move = get_opposite_move(last_move)
-    possible_move.remove(op_move)
-    return possible_move
+        return possible_move
+    else:
+        op_move = get_opposite_move(last_move)
+        possible_move.remove(op_move)
+        return possible_move
 
 def set_board_state(board, pos, state):
     board[pos['y']][pos['x']] = state
