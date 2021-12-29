@@ -30,7 +30,7 @@ def handle_start():
     request.json contains information about the game that's about to be played.
     """
     data = request.get_json()
-    print(f"{data['game']['id']} START")
+    print(f"{data['game']['id']} START Turn={data['turn']}")
     players[data['game']['id']] = Player(data)
     return "ok"
 
@@ -48,7 +48,7 @@ def handle_move():
     else:
         players[data['game']['id']].update(data)
         move = players[data['game']['id']].get_move()
-    print(f"{data['game']['id']} MOVE {move}")
+    print(f"{data['game']['id']} MOVE Turn={data['turn']} {move}")
     return {"move": move}
 
 
