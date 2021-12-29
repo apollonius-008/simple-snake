@@ -5,7 +5,7 @@ from flask import Flask
 from flask import request
 
 app = Flask(__name__)
-
+players = {}
 
 @app.get("/")
 def handle_info():
