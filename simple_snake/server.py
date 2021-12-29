@@ -48,6 +48,7 @@ def handle_move():
     else:
         players[data['game']['id']].update(data)
         move = players[data['game']['id']].get_move()
+    print(f"{data['game']['id']} MOVE {move}")
     return {"move": move}
 
 
