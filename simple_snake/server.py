@@ -4,9 +4,11 @@ import os
 from flask import Flask
 from flask import request
 from logic import Player
+import json
 
 app = Flask(__name__)
 players = {}
+test_data = []
 
 @app.get("/")
 def handle_info():
@@ -30,6 +32,8 @@ def handle_start():
     request.json contains information about the game that's about to be played.
     """
     data = request.get_json()
+    test_data.append(data)
+
     print(f"{data['game']['id']} START Turn={data['turn']}")
     players[data['game']['id']] = Player(data)
     return "ok"
@@ -42,6 +46,8 @@ def handle_move():
     Valid moves are "up", "down", "left", or "right".
     """
     data = request.get_json()
+    test_data.append(data)
+
     if data['turn'] == 0:
         players[data['game']['id']] = Player(data)
         move = players[data['game']['id']].get_move()
@@ -59,6 +65,9 @@ def end():
     It's purely for informational purposes, you don't have to make any decisions here.
     """
     data = request.get_json()
+    with open(f"game-{data['game']['id']}.json", 'a') as file:
+        json.dump(test_data, file)
+        
     del players[data['game']['id']]
     print(f"{data['game']['id']} END")
     return "ok"
