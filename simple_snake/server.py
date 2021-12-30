@@ -68,7 +68,7 @@ def end():
     """
     data = request.get_json()
     data['expected'] = ['up', 'down', 'left', 'right']
-    with open(f"game-{data['game']['id']}.json", 'a') as file:
+    with open(f"tests/game-{data['game']['id']}.json", 'a') as file:
         json.dump(test_data, file)
 
     del players[data['game']['id']]
