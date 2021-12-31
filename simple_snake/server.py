@@ -32,8 +32,7 @@ def handle_start():
     request.json contains information about the game that's about to be played.
     """
     data = request.get_json()
-    data['expected'] = ['up', 'down', 'left', 'right']
-    test_data.append(data)
+    test_data = []
 
     print(f"{data['game']['id']} START Turn={data['turn']}")
     players[data['game']['id']] = Player(data)
@@ -68,6 +67,8 @@ def end():
     """
     data = request.get_json()
     data['expected'] = ['up', 'down', 'left', 'right']
+    test_data.append(data)
+    
     with open(f"tests/game-{data['game']['id']}.json", 'a') as file:
         json.dump(test_data, file)
 
