@@ -21,5 +21,10 @@ def test_from_files():
         with open(f"tests\\{fname}", 'r') as file:
             games = json.load(file)
             for data in games:
-                pass
+                if data['turn'] == 0:
+                    player = Player(data)
+                    possible_moves = ['up', 'down', 'left', 'right']
+                    possible_moves = player.all_moves(possible_moves)
+
+                    assert possible_moves == data['expected'], f"actual={possible_moves}, expected={data['expected']}"
 

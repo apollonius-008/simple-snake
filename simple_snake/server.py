@@ -7,8 +7,8 @@ from logic import Player
 import json
 
 app = Flask(__name__)
-players = {}
-test_data = []
+app.players = {}
+app.test_data = []
 
 @app.get("/")
 def handle_info():
@@ -32,10 +32,10 @@ def handle_start():
     request.json contains information about the game that's about to be played.
     """
     data = request.get_json()
-    test_data = []
+    app.test_data = []
 
     print(f"{data['game']['id']} START Turn={data['turn']}")
-    players[data['game']['id']] = Player(data)
+    app.players[data['game']['id']] = Player(data)
     return "ok"
 
 
@@ -47,14 +47,14 @@ def handle_move():
     """
     data = request.get_json()
     data['expected'] = ['up', 'down', 'left', 'right']
-    test_data.append(data)
+    app.test_data.append(data)
 
     if data['turn'] == 0:
-        players[data['game']['id']] = Player(data)
-        move = players[data['game']['id']].get_move()
+        app.players[data['game']['id']] = Player(data)
+        move = app.players[data['game']['id']].get_move()
     else:
-        players[data['game']['id']].update(data)
-        move = players[data['game']['id']].get_move()
+        app.players[data['game']['id']].update(data)
+        move = app.players[data['game']['id']].get_move()
     print(f"{data['game']['id']} MOVE Turn={data['turn']} {move}")
     return {"move": move}
 
@@ -67,12 +67,12 @@ def end():
     """
     data = request.get_json()
     data['expected'] = ['up', 'down', 'left', 'right']
-    test_data.append(data)
-    
-    with open(f"tests/game-{data['game']['id']}.json", 'a') as file:
-        json.dump(test_data, file)
+    app.test_data.append(data)
 
-    del players[data['game']['id']]
+    with open(f"tests/game-{data['game']['id']}.json", 'a') as file:
+        json.dump(app.test_data, file)
+
+    del app.players[data['game']['id']]
     print(f"{data['game']['id']} END")
     return "ok"
 
